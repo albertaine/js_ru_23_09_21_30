@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Comment from './Comment'
 
 export default class Article extends Component {
 
@@ -6,16 +7,9 @@ export default class Article extends Component {
         super()
         this.state = {
             isOpen: false,
-            foo: 'bar'
+            isComOpen: false
         }
     }
-
-/*
-    state = {
-        isOpen: false,
-        foo: 'bar'
-    }
-*/
 
     render() {
         const { article } = this.props
@@ -24,10 +18,27 @@ export default class Article extends Component {
 
         const body = isOpen ? <section>{article.text}</section> : null
         // <section style = {{display: isOpen ? 'block' : 'none'}}>{article.text}</section>
+        const btnCaption = this.state.isComOpen ? 'Закрыть комменты' : 'Открыть комменты'
+        const comButton = !isOpen ? null :
+            <div>
+                <button type="button" onClick={this.toggleComOpen}>
+                    {btnCaption}
+                </button>
+            </div>
+
+        const articleComments = this.state.isComOpen && this.state.isOpen &&
+        typeof article.comments !== 'undefined' ?
+        article.comments.map(comment => <li key={comment.id}><Comment comment = {comment}/></li>)
+            :null
+
         return (
             <div>
                 <h3 onClick = {this.toggleOpen}>{article.title}</h3>
                 {body}
+                {comButton}
+                <ul>
+                    {articleComments}
+                </ul>
             </div>
         )
     }
@@ -37,15 +48,10 @@ export default class Article extends Component {
             isOpen: !this.state.isOpen
         })
     }
-}
 
-/*
-export default (props) => {
-    const { article } = props
-    return (
-        <div>
-            <h3>{article.title}</h3>
-            <section>{article.text}</section>
-        </div>
-    )
-}*/
+    toggleComOpen = ev => {
+        this.setState({
+            isComOpen: !this.state.isComOpen
+        })
+    }
+}
