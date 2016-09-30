@@ -7,6 +7,7 @@ export default class Article extends Component {
         super()
         this.state = {
             isOpen: false,
+            //лучше сделать еще один компонент CommentList и внести туда этот стейт и половину логики
             isComOpen: false
         }
     }
