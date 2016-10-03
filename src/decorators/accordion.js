@@ -6,6 +6,7 @@ export default function accordion(Component) {
             Component: PropTypes.array
         }
         state = {
+            //Не привязывайся к названию сущности, декоратор будет использоваться везде. Назови, скажем, openItemId
             openArticleId: null
         }
 
