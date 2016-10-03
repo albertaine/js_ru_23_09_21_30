@@ -1,45 +1,50 @@
-import React, { Component } from 'react'
-import Comment from './Comment'
+import React, { Component, PropTypes } from 'react'
+import CommentList from './CommentList'
 
 export default class Article extends Component {
+    static propTypes = {
+        article: PropTypes.object,
+        isOpen: PropTypes.bool,
+        openArticle: PropTypes.func
+    }
+    static defaultProps = {
+
+    }
+    componentWillMount() {
+        console.log('---', 'mounting')
+    }
+
+    componentDidMount() {
+        console.log('---', 'mounted')
+    }
+
+    componentWillUnmount() {
+        console.log('---', 'unmounting')
+    }
 
     constructor(props) {
         super()
         this.state = {
-            isOpen: false,
-            //лучше сделать еще один компонент CommentList и внести туда этот стейт и половину логики
-            isComOpen: false
+            foo: 'bar'
         }
     }
 
+/*
+    state = {
+        isOpen: false,
+        foo: 'bar'
+    }
+*/
+
     render() {
-        const { article } = this.props
-        const { isOpen } = this.state
-        console.log('---', this.state)
+        const { article, isOpen, openArticle } = this.props
 
-        const body = isOpen ? <section>{article.text}</section> : null
+        const body = isOpen ? <section>{article.text}<CommentList comments = {article.comments} /></section> : null
         // <section style = {{display: isOpen ? 'block' : 'none'}}>{article.text}</section>
-        const btnCaption = this.state.isComOpen ? 'Закрыть комменты' : 'Открыть комменты'
-        const comButton = !isOpen ? null :
-            <div>
-                <button type="button" onClick={this.toggleComOpen}>
-                    {btnCaption}
-                </button>
-            </div>
-
-        const articleComments = this.state.isComOpen && this.state.isOpen &&
-        typeof article.comments !== 'undefined' ?
-        article.comments.map(comment => <li key={comment.id}><Comment comment = {comment}/></li>)
-            :null
-
         return (
             <div>
-                <h3 onClick = {this.toggleOpen}>{article.title}</h3>
+                <h3 onClick = {openArticle}>{article.title}</h3>
                 {body}
-                {comButton}
-                <ul>
-                    {articleComments}
-                </ul>
             </div>
         )
     }
@@ -49,10 +54,15 @@ export default class Article extends Component {
             isOpen: !this.state.isOpen
         })
     }
-
-    toggleComOpen = ev => {
-        this.setState({
-            isComOpen: !this.state.isComOpen
-        })
-    }
 }
+
+/*
+export default (props) => {
+    const { article } = props
+    return (
+        <div>
+            <h3>{article.title}</h3>
+            <section>{article.text}</section>
+        </div>
+    )
+}*/
