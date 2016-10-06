@@ -1,16 +1,14 @@
 // decorator === HOC === Higher Order Component
-import React, { PropTypes } from 'react'
+import React from 'react'
+import NewCommentForm from '../components/NewCommentForm'
 
 export default function toggleOpen(Component) {
-    return class WrapperComponent extends React.Component {
-        static propTypes = {
-            Component: PropTypes.array
-        }
+    return class ToggleOpen extends React.Component {
         state = {
             isOpen: false
         }
 
-        toggleOpen = ev => {
+        toggleOpen = ev =>  {
             ev.preventDefault()
             this.setState({
                 isOpen: !this.state.isOpen
@@ -18,7 +16,12 @@ export default function toggleOpen(Component) {
         }
 
         render() {
-            return <Component {...this.props} {...this.state} toggleOpen = {this.toggleOpen}/>
+            return (
+                <div>
+                    <Component {...this.props} {...this.state} toggleOpen = {this.toggleOpen}/>
+                    <NewCommentForm />
+                </div>
+            )
         }
     }
 }
