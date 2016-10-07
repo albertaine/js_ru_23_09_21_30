@@ -4,7 +4,7 @@ import 'react-select/dist/react-select.css'
 import DayPicker, { DateUtils } from 'react-day-picker'
 import moment from 'moment'
 import 'react-day-picker/lib/style.css'
-
+//Здесь появляется много логики, лучше разбить на отдельные компоненты
 class Filters extends Component {
     static propTypes = {
         articles: PropTypes.array
@@ -53,6 +53,7 @@ class Filters extends Component {
                 <div className="RangeExample">
                     { !from && !to && <p>Please select the <strong>first day</strong>.</p> }
                     { from && !to && <p>Please select the <strong>last day</strong>.</p> }
+                    {/*Не пиши столько кода в JSX*/}
                     { from && to &&
                     <p>
                         You chose from { moment(from).format('L') } to { moment(to).format('L') }.
