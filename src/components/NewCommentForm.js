@@ -1,43 +1,36 @@
 import React, { Component, PropTypes } from 'react'
 
-class NewArticleForm extends Component {
+class NewCommentForm extends Component {
     static propTypes = {
-
     };
 
     state = {
-        user: '',
-        text: ''
+        text: '',
+        user: ''
     }
 
-    handleUserChange = ev => {
-        this.setState({
-            user: ev.target.value
-        })
-    }
-    handleTextChange = ev => {
-        this.setState({
-            text: ev.target.value
-        })
-    }
+    handleChange = field => ev => this.setState({
+        [field]: ev.target.value
+    })
 
-    addComment = ev => {
-        console.log('...Added comment...user: ', this.state.user, ', text: ', this.state.text);
+    handleSubmit = ev => {
+        ev.preventDefault()
+        console.log('---', this.state)
+        this.setState({
+            user: '',
+            text: ''
+        })
     }
 
     render() {
         return (
-            <div>
-                <p/>
-                new comment:<p/>
-                user:<br/>
-                <input type = "text" value = {this.state.user} onChange = {this.handleUserChange}/><p/>
-                text:<br/>
-                <input type = "text" value = {this.state.text} onChange = {this.handleTextChange}/><p/>
-                <button onClick={this.addComment}>Add</button>
-            </div>
+            <form onSubmit = {this.handleSubmit}>
+                comment: <input type="text" value={this.state.text} onChange = {this.handleChange('text')}/>
+                comment: <input type="text" value={this.state.user} onChange = {this.handleChange('user')}/>
+                <input type = "submit"/>
+            </form>
         )
     }
 }
 
-export default NewArticleForm
+export default NewCommentForm
