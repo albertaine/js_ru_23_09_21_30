@@ -5,6 +5,7 @@ import CSSTransition from 'react-addons-css-transition-group'
 import './animate.css'
 import { deleteArticle } from '../AC/articles'
 import { connect } from 'react-redux'
+import { getRelation } from '../store/helpers'
 
 class Article extends Component {
     static propTypes = {
@@ -41,7 +42,7 @@ class Article extends Component {
         const body = isOpen ? (
             <section>
                 {article.text}
-                <CommentList ref = {this.handleRef} comments = {article.comments}/>
+                <CommentList ref = {this.handleRef} article = {article}/>
             </section>
         ) : null
 
@@ -66,5 +67,10 @@ class Article extends Component {
         deleteArticle(article.id)
     }
 }
+
+/*
+export default connect((state, props) => ({
+    comments: getRelation(props.article, 'comments', state)
+}), { deleteArticle })(Article)*/
 
 export default connect(null, { deleteArticle })(Article)

@@ -9,21 +9,11 @@ class SelectFilter extends Component {
     static propTypes = {
         articles: PropTypes.array.isRequired
     };
-/*
-    state = {
-        selected: null
-    }
-*/
-    //handleChange = selected => this.setState({ selected })
+
     handleChange = selected => this.props.changeSelection(selected.map(option => option.value))
 
     render() {
-/*
-        const { articles } = this.props
-        const { selected } = this.state
-*/
         const { articles, selected } = this.props
-
         const options = articles.map(article => ({
             label: article.title,
             value: article.id
@@ -38,8 +28,8 @@ class SelectFilter extends Component {
     }
 }
 
-//export default SelectFilter
 export default connect(state => ({
-    selected: state.filters.selected,
-    articles: state.articles
+    selected: state.filters.get('selected'),
+    //articles: Object.keys(state.articles).map(id => state.articles[id])
+    articles: state.articles.valueSeq().toArray()
 }), { changeSelection })(SelectFilter)

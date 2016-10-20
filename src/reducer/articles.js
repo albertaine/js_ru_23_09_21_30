@@ -1,12 +1,31 @@
-import { DELETE_ARTICLE } from '../constants'
-import { articles as defaultArticles } from '../fixtures'
+import { normalizedArticles } from '../fixtures'
+import { DELETE_ARTICLE, ADD_COMMENT } from '../constants'
+import { arrayToMap } from '../store/helpers'
+import { Record } from 'immutable'
 
-export default (articles = defaultArticles, action) => {
-    const { type, payload } = action
+const ArticleModel = Record({
+    id: null,
+    date: null,
+    title: "",
+    text: "",
+    comments: []
+})
+
+export default (articles = arrayToMap(normalizedArticles, article => new ArticleModel(article)), action) => {
+    const { type, payload, generatedId } = action
 
     switch (type) {
         case DELETE_ARTICLE:
-            return articles.filter(article => article.id != payload.id)
+/*
+            return Object.keys(articles)
+                .filter(id => id != payload.id)
+                .reduce((acc, id) => ({...acc, [id]: articles[id]}), {})
+*/
+            return articles.delete(payload.id)
+
+        case ADD_COMMENT:
+            return articles.updateIn([payload.articleId, 'comments'], comments => comments.concat(generatedId))
     }
+
     return articles
 }
