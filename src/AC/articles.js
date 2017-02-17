@@ -16,7 +16,6 @@ export function loadAllArticles() {
 }
 
 export function loadArticle(id) {
-    console.log('!!! ARTICLE_ID:', id)
     return (dispatch) => {
         dispatch({
             type: LOAD_ARTICLE + START,

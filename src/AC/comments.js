@@ -1,5 +1,5 @@
+import { ADD_COMMENT, LOAD_COMMENTS_FOR_ARTICLE, LOAD_COMMENTS_FOR_PAGE, START, SUCCESS } from '../constants'
 import $ from 'jquery'
-import { ADD_COMMENT, LOAD_COMMENTS_FOR_ARTICLE, START, SUCCESS } from '../constants'
 
 export function addComment(comment, articleId) {
     return {
@@ -18,22 +18,29 @@ export function loadCommentsForArticle(articleId) {
         callAPI: `/api/comment?article=${articleId}`
     }
 }
+
+export function loadCommentsForPage(page) {
+    return {
+        type: LOAD_COMMENTS_FOR_PAGE,
+        payload: { page },
+        callAPI: `/api/comment?limit=5&offset=${(page - 1) * 5}`
+    }
+}
+
 /*
 export function loadCommentsForArticle(articleId) {
     return (dispatch) => {
         dispatch({
             type: LOAD_COMMENTS_FOR_ARTICLE + START,
-            payload: { id }
+            payload: { articleId }
         })
 
-        setTimeout(() => {
-            $.get(`/api/comment?article=${articleId}`)
-                .done(response => dispatch({
-                    type: LOAD_COMMENTS_FOR_ARTICLE + SUCCESS,
-                    payload: { id },
-                    response
-                }))
-        }, 1000)
+        $.get(`/api/comment?article=${articleId}`)
+            .done(response => dispatch({
+                type: LOAD_COMMENTS_FOR_ARTICLE + SUCCESS,
+                payload: { articleId },
+                response
+            }))
     }
 }
 */

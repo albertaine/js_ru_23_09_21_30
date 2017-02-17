@@ -1,5 +1,5 @@
-import { normalizedArticles } from '../fixtures'
-import { DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES, LOAD_ARTICLE, LOAD_COMMENTS_FOR_ARTICLE, START, SUCCESS, FAIL } from '../constants'
+import { LOAD_COMMENTS_FOR_ARTICLE, DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES, LOAD_ARTICLE,
+    START, SUCCESS, FAIL } from '../constants'
 import { arrayToMap } from '../store/helpers'
 import { Record, Map } from 'immutable'
 
@@ -20,7 +20,6 @@ const defaultState = new Map({
     loaded: false
 })
 
-// arrayToMap(normalizedArticles, article => new ArticleModel(article))
 export default (articles = defaultState, action) => {
     const { type, payload, generatedId, response } = action
 
@@ -35,9 +34,10 @@ export default (articles = defaultState, action) => {
             return articles.set('loading', true)
 
         case LOAD_ALL_ARTICLES + SUCCESS:
-            console.log('LOAD_ALL_ARTICLES + SUCCESS...response:', response)
             return articles
-                .set('entities', arrayToMap(response, article => new ArticleModel(article)))
+                .update('entities', entities =>
+                    entities.merge(arrayToMap(response,  article => new ArticleModel(article)))
+                )
                 .set('loading', false)
                 .set('loaded', true)
 
@@ -45,9 +45,7 @@ export default (articles = defaultState, action) => {
             return articles.setIn(['entities', payload.id, 'loading'], true)
 
         case LOAD_ARTICLE + SUCCESS:
-            console.log('LOAD_ARTICLE + SUCCESS...response:', response)
-            return articles
-                .setIn(['entities', payload.id], new ArticleModel(response))
+            return articles.setIn(['entities', payload.id], new ArticleModel(response))
 
         case LOAD_COMMENTS_FOR_ARTICLE + START:
             return articles.setIn(['entities', payload.articleId, 'commentsLoading'], true)
